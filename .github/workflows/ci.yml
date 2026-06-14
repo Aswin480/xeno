@@ -53,9 +53,7 @@ jobs:
           node-version: '20'
           cache: 'npm'
       - name: Install Monorepo Dependencies
-        run: |
-          npm ci
-          npm install @rollup/rollup-linux-x64-gnu --no-save
+        run: npm ci
       - name: Build Frontend
         run: |
           cd frontend
