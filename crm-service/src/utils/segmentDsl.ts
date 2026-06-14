@@ -13,6 +13,25 @@ export interface SegmentDsl {
 
 type CustomerWithOrders = Customer & { orders: Order[] };
 
+const canonicalMap: Record<string, string> = {
+  'newuser': 'new user',
+  'new_user': 'new user',
+  'new-user': 'new user',
+  'cartabandoner': 'cart abandoner',
+  'cart_abandoner': 'cart abandoner',
+  'cart-abandoner': 'cart abandoner',
+  'vip': 'vip',
+  'active': 'vip',
+  'dormant': 'inactive',
+  'inactive': 'inactive',
+  'general': 'general'
+};
+
+export function getCanonicalSegment(segment: string): string {
+  const clean = segment.toLowerCase().replace(/[_-]/g, '').trim();
+  return canonicalMap[clean] || clean;
+}
+
 /**
  * Evaluates whether a customer satisfies the DSL criteria
  */
@@ -67,11 +86,11 @@ function evaluateCondition(customer: CustomerWithOrders, condition: DslCondition
       } catch {
         customerSegments = customer.segments.split(',').map(s => s.trim());
       }
-      const targetVal = String(value).toLowerCase();
+      const targetVal = getCanonicalSegment(String(value));
       if (operator === 'equals') {
-        return customerSegments.some(s => s.toLowerCase() === targetVal);
+        return customerSegments.some(s => getCanonicalSegment(s) === targetVal);
       } else if (operator === 'contains') {
-        return customerSegments.some(s => s.toLowerCase().includes(targetVal));
+        return customerSegments.some(s => getCanonicalSegment(s).includes(targetVal));
       }
       return false;
     }

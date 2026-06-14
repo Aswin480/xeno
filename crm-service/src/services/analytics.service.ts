@@ -1,6 +1,7 @@
 import { prisma } from '../config/prisma';
 import { CampaignStats } from '../types';
 import { logger } from '../utils/logger';
+import { getCanonicalSegment } from '../utils/segmentDsl';
 
 export class AnalyticsService {
   private static segmentCache = new Map<string, any[]>();
@@ -240,9 +241,9 @@ export class AnalyticsService {
       const matchingIds = campaignsOverview.filter((c) => {
         try {
           const dsl = JSON.parse(c.segmentDsl);
-          return dsl.conditions?.some((cond: any) => cond.field === 'segment' && String(cond.value).toLowerCase() === segment.toLowerCase());
+          return dsl.conditions?.some((cond: any) => cond.field === 'segment' && getCanonicalSegment(String(cond.value)) === getCanonicalSegment(segment));
         } catch {
-          return c.segmentDsl.toLowerCase().includes(segment.toLowerCase());
+          return getCanonicalSegment(c.segmentDsl).includes(getCanonicalSegment(segment));
         }
       }).map(c => c.id);
 
@@ -299,9 +300,9 @@ export class AnalyticsService {
       const matchingIds = campaignsOverview.filter((c) => {
         try {
           const dsl = JSON.parse(c.segmentDsl);
-          return dsl.conditions?.some((cond: any) => cond.field === 'segment' && String(cond.value).toLowerCase() === segment.toLowerCase());
+          return dsl.conditions?.some((cond: any) => cond.field === 'segment' && getCanonicalSegment(String(cond.value)) === getCanonicalSegment(segment));
         } catch {
-          return c.segmentDsl.toLowerCase().includes(segment.toLowerCase());
+          return getCanonicalSegment(c.segmentDsl).includes(getCanonicalSegment(segment));
         }
       }).map(c => c.id);
 
