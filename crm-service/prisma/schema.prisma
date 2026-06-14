@@ -1,0 +1,76 @@
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+model Customer {
+  id         String              @id @default(uuid())
+  name       String
+  email      String              @unique
+  phone      String              @unique
+  segments   String              // JSON or comma-separated string representing customer attributes
+  createdAt  DateTime            @default(now())
+  updatedAt  DateTime            @updatedAt
+  orders     Order[]
+  recipients CampaignRecipient[]
+}
+
+model Order {
+  id         String   @id @default(uuid())
+  customerId String
+  customer   Customer @relation(fields: [customerId], references: [id], onDelete: Cascade)
+  amount     Float
+  status     String   // "COMPLETED", "PENDING", "CANCELLED"
+  category   String?  // Espresso, Latte, Cold Brew, Americano, Mocha, Coffee Beans, Pastries
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+}
+
+model Campaign {
+  id              String              @id @default(uuid())
+  name            String
+  goal            String
+  segmentDsl      String              // Simple DSL JSON representing target criteria
+  status          String              // "DRAFT", "READY", "LAUNCHING", "COMPLETED", "FAILED"
+  channel         String              // "SMS", "EMAIL", "WHATSAPP"
+  messageTemplate String
+  confidenceScore Float               @default(0.0)
+  estimatedRoi    Float               @default(0.0)
+  createdAt       DateTime            @default(now())
+  updatedAt       DateTime            @updatedAt
+  recipients      CampaignRecipient[]
+}
+
+model CampaignRecipient {
+  id         String         @id @default(uuid())
+  campaignId String
+  campaign   Campaign       @relation(fields: [campaignId], references: [id], onDelete: Cascade)
+  customerId String
+  customer   Customer       @relation(fields: [customerId], references: [id], onDelete: Cascade)
+  status     String         // "PENDING", "SENT", "DELIVERED", "READ", "FAILED"
+  sentAt     DateTime?
+  deliveredAt DateTime?
+  readAt     DateTime?
+  failedAt   DateTime?
+  errorMessage String?
+  eventId    String?        @unique // Idempotency key for callbacks
+  createdAt  DateTime       @default(now())
+  updatedAt  DateTime       @updatedAt
+  events     ChannelEvent[]
+
+  @@unique([campaignId, customerId]) // A campaign can only target a customer once
+}
+
+model ChannelEvent {
+  id          String            @id @default(uuid())
+  recipientId String
+  recipient   CampaignRecipient @relation(fields: [recipientId], references: [id], onDelete: Cascade)
+  eventId     String            @unique // Idempotent eventId from the provider
+  eventType   String            // "SENT", "DELIVERED", "READ", "FAILED"
+  timestamp   DateTime          @default(now())
+  payload     String            // JSON string containing full provider response payload
+}

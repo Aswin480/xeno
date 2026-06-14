@@ -1,0 +1,22 @@
+{
+  "name": "xeno-copilot-monorepo",
+  "version": "1.0.0",
+  "private": true,
+  "workspaces": [
+    "frontend",
+    "crm-service",
+    "channel-simulator"
+  ],
+  "scripts": {
+    "install:all": "npm install && npm install --prefix frontend && npm install --prefix crm-service && npm install --prefix channel-simulator",
+    "dev:frontend": "npm run dev --prefix frontend",
+    "dev:crm": "npm run dev --prefix crm-service",
+    "dev:simulator": "npm run dev --prefix channel-simulator",
+    "dev": "concurrently \"npm run dev:crm\" \"npm run dev:simulator\" \"npm run dev:frontend\"",
+    "db:setup": "npm run db:setup --prefix crm-service",
+    "db:seed": "npm run db:seed --prefix crm-service"
+  },
+  "devDependencies": {
+    "concurrently": "^8.2.2"
+  }
+}

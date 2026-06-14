@@ -1,0 +1,66 @@
+name: Monorepo CI
+
+on:
+  push:
+    branches: [ main, master ]
+  pull_request:
+    branches: [ main, master ]
+
+jobs:
+  test-crm-service:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Use Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+      - name: Install CRM Dependencies
+        run: |
+          cd crm-service
+          npm ci
+      - name: Run Prisma Generate
+        run: |
+          cd crm-service
+          npx prisma generate
+      - name: Run CRM Tests
+        run: |
+          cd crm-service
+          npm test
+
+  test-channel-simulator:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Use Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+      - name: Install Simulator Dependencies
+        run: |
+          cd channel-simulator
+          npm ci
+      - name: Run Simulator Tests
+        run: |
+          cd channel-simulator
+          npm test
+
+  build-frontend:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Use Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+      - name: Install Frontend Dependencies
+        run: |
+          cd frontend
+          npm ci
+      - name: Build Frontend
+        run: |
+          cd frontend
+          npm run build
