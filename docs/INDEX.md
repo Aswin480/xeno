@@ -12,6 +12,7 @@ Below is a directory of the available documentation, mapped by topic and target 
 | :--- | :--- | :--- | :--- |
 | [COMPLETE-SUMMARY.md](./COMPLETE-SUMMARY.md) | Executive and Investor Summary | Investors, PMs, Staff Architects | Vision, Mission, Problem Statement, Solution, Roadmap |
 | [architecture-diagram.md](./architecture-diagram.md) | Core System Architecture Blueprint | Backend & DevOps Engineers | User/Frontend/Backend/AI Layer interactions and tech stack |
+| [PRODUCTION-DEPLOYMENT.md](./PRODUCTION-DEPLOYMENT.md) | Production Hosting & Webhook Setup | DevOps, Systems Engineers | Live URLs, environment variables, callback flows, fixes |
 | [sequence-diagram.md](./sequence-diagram.md) | Asynchronous Data & Execution Flows | System Integration Engineers | Live simulation loops, feedback callbacks, errors |
 | [er-diagram.md](./er-diagram.md) | Entity Relationship & DB Schema | Database Administrators, Architects | Prisma models, Campaign relationships, Event logging |
 | [ai-workflow.md](./ai-workflow.md) | AI Agentic Lifecycle & Prompts | AI/ML Engineers, Data Scientists | Tool routing, Prompt structures, LLM response validation |
@@ -51,6 +52,7 @@ For integration developers, database managers, and DevOps team members:
 * **Step 1:** [architecture-diagram.md](./architecture-diagram.md) — High-level layout of the microservices.
 * **Step 2:** [sequence-diagram.md](./sequence-diagram.md) — Check live callback loops and message states.
 * **Step 3:** [er-diagram.md](./er-diagram.md) — Reference the schema layout.
+* **Step 4:** [PRODUCTION-DEPLOYMENT.md](./PRODUCTION-DEPLOYMENT.md) — Check live URLs, variables, and webhook tracking setup.
 
 ---
 

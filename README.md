@@ -30,7 +30,7 @@ xeno/
 
 ### Stack Highlights
 * **Frontend:** React, Vite, Tailwind CSS, Lucide Icons, Recharts.
-* **CRM Backend:** Node.js, Express, Prisma ORM, SQLite.
+* **CRM Backend:** Node.js, Express, Prisma ORM, Neon PostgreSQL.
 * **Simulator:** Asynchronous queue mock handlers mimicking SMS/Email/WhatsApp callback webhooks.
 
 ---
@@ -43,16 +43,16 @@ To run Xeno locally, spin up each service in separate terminal windows.
 ```bash
 cd crm-service
 npm install
-npx prisma db push       # Seed schema to local SQLite database
-npm run seed             # Seed sample customers and transactions
-npm run dev              # Run server on http://localhost:5000
+npx prisma db push       # Sync schema to PostgreSQL database
+npm run db:seed          # Seed sample customers and transactions
+npm run dev              # Run server on http://localhost:8000
 ```
 
 ### 2. Channel Simulator Setup
 ```bash
 cd channel-simulator
 npm install
-npm run dev              # Run simulator on http://localhost:5001
+npm run dev              # Run simulator on http://localhost:8001
 ```
 
 ### 3. Frontend Dashboard Setup

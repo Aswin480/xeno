@@ -51,7 +51,7 @@ Xeno is a fully autonomous, AI-native marketing platform built on three core pil
 
 ## Technical Highlights
 * **Agentic Planner Architecture:** Deconstructs campaign goals into concrete steps (Segment identification, Historical Analysis, Channel Recommendation, Message Selection).
-* **Prisma SQLite Ledger Schema:** Eventual-consistency ledger design matching recipients with immutable UUID channels and delivery states.
+* **Prisma PostgreSQL Ledger Schema:** Eventual-consistency ledger design matching recipients with immutable UUID channels and delivery states, powered by Neon PostgreSQL.
 * **Modern React + Vite Frontend:** Pure CSS-variable design tokens for border definitions and zero-shadow visual fidelity.
 
 ---
@@ -74,7 +74,7 @@ timeline
     Phase 4 : Autonomous Optimizer : Predictive scheduling : Self-healing pipelines
 ```
 
-* **Phase 1 (Current):** Semantic Design system completed. Closed-loop simulator pipeline running on local SQLite databases.
+* **Phase 1 (Current):** Semantic Design system completed. Closed-loop simulator pipeline running on production Neon PostgreSQL databases.
 * **Phase 2 (Next 6 Months):** Multi-agent reasoning loops. The Planner will consult secondary agents (e.g., compliance agent, brand voice agent) before generating campaigns.
 * **Phase 3 (Next 12 Months):** Real-world dispatchers (Twilio, SendGrid, WhatsApp Business APIs) with token-bucket rate limiters and user role authentications.
 * **Phase 4 (Next 18 Months):** Autonomous Optimizer. The system runs independent micro-campaigns on autopilot, adjusting budget and channel weights continuously.

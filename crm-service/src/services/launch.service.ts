@@ -93,7 +93,14 @@ export class LaunchService {
   ): Promise<void> {
     logger.info(`Starting background message delivery for campaign ${campaignId}...`);
 
-    const callbackUrl = `http://localhost:${config.port}/receipts`;
+    let backendUrl = process.env.BACKEND_URL;
+    if (!backendUrl && process.env.RAILWAY_STATIC_URL) {
+      backendUrl = `https://${process.env.RAILWAY_STATIC_URL}`;
+    }
+    if (!backendUrl) {
+      backendUrl = `http://localhost:${config.port}`;
+    }
+    const callbackUrl = `${backendUrl.replace(/\/$/, '')}/receipts`;
     const chunkSize = 5;
 
     for (let i = 0; i < recipients.length; i += chunkSize) {

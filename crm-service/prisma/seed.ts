@@ -181,7 +181,8 @@ async function main() {
     }
   }
 
-  await chunkAndInsert(prisma.order, 'Order', orders);
+  // Defer writing orders to database to allow historical campaign conversion simulation
+
 
   // 3. Generate 70 Campaigns
   console.log('📣 Generating 70 Campaigns...');
@@ -411,6 +412,22 @@ async function main() {
             payload: JSON.stringify({ provider: 'user_agent', status: 'clicked', segment }),
           });
         }
+
+        // Simulate a conversion order (15% rate)
+        if (Math.random() < 0.15 && readTime) {
+          const orderTime = new Date(readTime.getTime() + (10 + Math.floor(Math.random() * 50)) * 60 * 1000);
+          const amount = 10.00 + Math.random() * 25.00;
+          const category = coffeeCategories[Math.floor(Math.random() * coffeeCategories.length)];
+          orders.push({
+            id: randomUUID(),
+            customerId: customer.id,
+            amount: Math.round(amount * 100) / 100,
+            status: 'COMPLETED',
+            category,
+            createdAt: orderTime,
+            updatedAt: new Date(),
+          });
+        }
       }
 
       if (status === 'FAILED') {
@@ -437,6 +454,10 @@ async function main() {
   // Insert Events in chunks
   console.log('💾 Writing ChannelEvents to Database...');
   await chunkAndInsert(prisma.channelEvent, 'ChannelEvent', events);
+
+  // Insert Orders in chunks (including cohort and simulated campaign conversion orders)
+  console.log('💾 Writing Orders to Database...');
+  await chunkAndInsert(prisma.order, 'Order', orders);
 
   console.log('✨ Database successfully seeded with 100% complete BrewBean Coffee Dataset!');
 }
