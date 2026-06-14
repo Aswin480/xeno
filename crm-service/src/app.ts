@@ -21,7 +21,7 @@ app.use(helmet());
 
 // Dynamic CORS configuration supporting previews, custom domains, and local environments
 const allowedOrigins = [
-  process.env.FRONTEND_URL,
+  process.env.FRONTEND_URL?.replace(/\/$/, ''),
   'http://localhost:5173'
 ].filter(Boolean);
 
@@ -30,8 +30,9 @@ app.use(cors({
     if (!origin) {
       return callback(null, true);
     }
-    const isNetlifyPreview = /^https:\/\/.*--xeno\.netlify\.app$/.test(origin);
-    const isAllowed = allowedOrigins.includes(origin) || isNetlifyPreview;
+    const normalizedOrigin = origin.replace(/\/$/, '');
+    const isNetlifyPreview = /^https:\/\/.*--xeno\.netlify\.app$/.test(normalizedOrigin) || normalizedOrigin === 'https://xeno-production.netlify.app';
+    const isAllowed = allowedOrigins.includes(normalizedOrigin) || isNetlifyPreview;
 
     if (isAllowed) {
       callback(null, true);
