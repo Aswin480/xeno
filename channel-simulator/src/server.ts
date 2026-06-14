@@ -18,6 +18,9 @@ app.use((req, _res, next) => {
 });
 
 // Mount Routes
+app.get('/health', (_req, res) => {
+  res.json({ status: 'ok', timestamp: new Date() });
+});
 app.use('/', channelRoutes);
 
 app.listen(port, () => {
