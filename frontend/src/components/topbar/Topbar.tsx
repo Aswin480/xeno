@@ -39,16 +39,11 @@ export const Topbar: React.FC = () => {
       }
 
       try {
-        // Send a request to simulator, expect 404/400 (which means it's online and listening)
-        await simulatorApi.post('/send', {});
+        // Probe simulator health endpoint
+        await simulatorApi.get('/health');
         setSimulatorStatus('online');
-      } catch (err: any) {
-        if (err.response) {
-          // If the server answered (even with error status), it is online
-          setSimulatorStatus('online');
-        } else {
-          setSimulatorStatus('offline');
-        }
+      } catch {
+        setSimulatorStatus('offline');
       }
     };
 
