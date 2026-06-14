@@ -8,6 +8,13 @@ jest.mock('../src/config/prisma', () => ({
       findUnique: jest.fn(),
       findMany: jest.fn(),
     },
+    campaignRecipient: {
+      count: jest.fn(),
+      groupBy: jest.fn(),
+    },
+    order: {
+      aggregate: jest.fn(),
+    },
   },
 }));
 
@@ -64,6 +71,16 @@ describe('Analytics Service Unit Tests', () => {
     };
 
     (prisma.campaign.findUnique as jest.Mock).mockResolvedValue(mockCampaignDbResponse);
+    (prisma.campaignRecipient.count as jest.Mock).mockResolvedValue(4);
+    (prisma.campaignRecipient.groupBy as jest.Mock).mockResolvedValue([
+      { status: 'READ', _count: { _all: 1 } },
+      { status: 'DELIVERED', _count: { _all: 1 } },
+      { status: 'SENT', _count: { _all: 1 } },
+      { status: 'FAILED', _count: { _all: 1 } },
+    ]);
+    (prisma.order.aggregate as jest.Mock).mockResolvedValue({
+      _sum: { amount: 150.00 }
+    });
 
     const stats = await analyticsService.getCampaignStats('camp-123');
 

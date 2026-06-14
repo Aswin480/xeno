@@ -16,10 +16,8 @@ jobs:
         with:
           node-version: '20'
           cache: 'npm'
-      - name: Install CRM Dependencies
-        run: |
-          cd crm-service
-          npm ci
+      - name: Install Monorepo Dependencies
+        run: npm ci
       - name: Run Prisma Generate
         run: |
           cd crm-service
@@ -38,10 +36,8 @@ jobs:
         with:
           node-version: '20'
           cache: 'npm'
-      - name: Install Simulator Dependencies
-        run: |
-          cd channel-simulator
-          npm ci
+      - name: Install Monorepo Dependencies
+        run: npm ci
       - name: Run Simulator Tests
         run: |
           cd channel-simulator
@@ -56,10 +52,8 @@ jobs:
         with:
           node-version: '20'
           cache: 'npm'
-      - name: Install Frontend Dependencies
-        run: |
-          cd frontend
-          npm ci
+      - name: Install Monorepo Dependencies
+        run: npm ci
       - name: Build Frontend
         run: |
           cd frontend

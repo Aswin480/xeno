@@ -30,8 +30,8 @@ describe('GeminiService API Key Rotation', () => {
   });
 
   it('should attempt the primary key first, and return success if it works', async () => {
-    process.env.GEMINI_API_KEY_PRIMARY = 'primary-key-123';
-    process.env.GEMINI_API_KEY_SECONDARY = 'secondary-key-456';
+    process.env.GEMINI_API_KEY_PRIMARY = 'AIzaSy-primary-key-123';
+    process.env.GEMINI_API_KEY_SECONDARY = 'AIzaSy-secondary-key-456';
 
     const mockResponse = {
       data: {
@@ -60,15 +60,15 @@ describe('GeminiService API Key Rotation', () => {
     expect(voiceSummary).toBe('Conversational response from primary key!');
     expect(mockedAxios.post).toHaveBeenCalledTimes(1);
     expect(mockedAxios.post).toHaveBeenCalledWith(
-      expect.stringContaining('key=primary-key-123'),
+      expect.stringContaining('key=AIzaSy-primary-key-123'),
       expect.any(Object),
       expect.any(Object)
     );
   });
 
   it('should fail over to the secondary key if the primary key throws an error', async () => {
-    process.env.GEMINI_API_KEY_PRIMARY = 'primary-key-123';
-    process.env.GEMINI_API_KEY_SECONDARY = 'secondary-key-456';
+    process.env.GEMINI_API_KEY_PRIMARY = 'AIzaSy-primary-key-123';
+    process.env.GEMINI_API_KEY_SECONDARY = 'AIzaSy-secondary-key-456';
 
     const primaryError = {
       response: {
@@ -110,7 +110,7 @@ describe('GeminiService API Key Rotation', () => {
     // Assert first call used primary key
     expect(mockedAxios.post).toHaveBeenNthCalledWith(
       1,
-      expect.stringContaining('key=primary-key-123'),
+      expect.stringContaining('key=AIzaSy-primary-key-123'),
       expect.any(Object),
       expect.any(Object)
     );
@@ -118,7 +118,7 @@ describe('GeminiService API Key Rotation', () => {
     // Assert second call used secondary key
     expect(mockedAxios.post).toHaveBeenNthCalledWith(
       2,
-      expect.stringContaining('key=secondary-key-456'),
+      expect.stringContaining('key=AIzaSy-secondary-key-456'),
       expect.any(Object),
       expect.any(Object)
     );
