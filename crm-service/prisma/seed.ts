@@ -327,7 +327,7 @@ async function main() {
 
     for (const customer of targets) {
       const recipientId = randomUUID();
-      const eventId = `evt-${recipientId.substring(0, 8)}`;
+      const eventId = `evt-${recipientId}`;
       const campaignTime = camp.createdAt.getTime();
 
       const roll = Math.random();
