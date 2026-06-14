@@ -57,4 +57,5 @@ jobs:
       - name: Build Frontend
         run: |
           cd frontend
+          npm install @rollup/rollup-linux-x64-gnu --no-save
           npm run build
